@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Petualangan Keberagaman Indonesia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #e0f7fa;
+            --accent-pink: #ff8a8a;
+            --accent-yellow: #ffd54f;
+            --accent-green: #81c784;
+            --accent-blue: #4fc3f7;
+            --text-dark: #2e4053;
+            --white: #ffffff;
+            --shadow-soft: 0 8px 16px rgba(0,0,0,0.1);
+            --shadow-glow: 0 0 15px rgba(255, 213, 79, 0.6);
+            --safe-padding: 20px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body { font-family: 'Nunito', sans-serif; background-color: var(--primary-bg); color: var(--text-dark); overflow: hidden; width: 100vw; height: 100vh; position: relative; padding-top: env(safe-area-inset-top); }
+        h1, h2, h3, .font-kids { font-family: 'Fredoka One', cursive; }
+        .sky-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #b3e5fc 0%, #e0f7fa 100%); z-index: -3; overflow: hidden; }
+        .cloud { position: absolute; background: white; border-radius: 100px; opacity: 0.8; animation: moveClouds 25s linear infinite; }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: white; border-radius: 50%; }
+        .cloud.c1 { width: 120px; height: 40px; top: 10%; left: -150px; animation-duration: 35s; }
+        .cloud.c1::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+        .cloud.c1::after { width: 70px; height: 70px; top: -35px; left: 40px; }
+        .cloud.c2 { width: 180px; height: 60px; top: 25%; left: -200px; animation-duration: 25s; opacity: 0.6; }
+        .cloud.c2::before { width: 70px; height: 70px; top: -30px; left: 25px; }
+        .cloud.c2::after { width: 90px; height: 90px; top: -45px; left: 65px; }
+        @keyframes moveClouds { 0% { transform: translateX(-10vw); } 100% { transform: translateX(110vw); } }
+        .rainbow { position: absolute; bottom: 0; right: -50px; width: 300px; height: 150px; border-radius: 300px 300px 0 0; border: 15px solid var(--accent-pink); border-bottom: none; opacity: 0.3; z-index: -2; transform: rotate(-15deg); }
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; padding: var(--safe-padding); transition: opacity 0.5s ease-in-out; opacity: 0; }
+        .screen.active { display: flex; opacity: 1; }
+        .btn-premium { background: linear-gradient(135deg, var(--accent-yellow) 0%, #fbc02d 100%); border: none; border-bottom: 5px solid #f57f17; border-radius: 20px; color: #5d4037; padding: 15px 35px; font-size: 20px; cursor: pointer; font-family: 'Fredoka One', cursive; box-shadow: var(--shadow-soft); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin: 10px; }
+        .btn-premium:hover { transform: scale(1.05); box-shadow: var(--shadow-glow); }
+        .btn-premium:active { transform: scale(0.95); border-bottom-width: 2px; }
+        .btn-blue { background: linear-gradient(135deg, var(--accent-blue) 0%, #0288d1 100%); border-bottom: 5px solid #01579b; color: white; }
+        #splash-screen { background: radial-gradient(circle, #e0f7fa 0%, #80deea 100%); }
+        .logo-container { text-align: center; animation: bounceTitle 2s infinite ease-in-out; }
+        .logo-title { font-size: 42px; color: #006064; text-shadow: 3px 3px 0px white; margin-bottom: 10px; }
+        .logo-sub { font-size: 20px; color: #00838f; background: rgba(255,255,255,0.6); padding: 5px 15px; border-radius: 15px; }
+        @keyframes bounceTitle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .char-container { display: flex; gap: 20px; margin: 30px 0; }
+        .char-card { background: white; border: 4px solid transparent; border-radius: 25px; padding: 20px; width: 140px; text-align: center; cursor: pointer; box-shadow: var(--shadow-soft); transition: all 0.3s ease; }
+        .char-card:hover { transform: translateY(-5px); }
+        .char-card.selected { border-color: var(--accent-pink); background: #fff3f3; transform: scale(1.05); box-shadow: 0 0 15px rgba(255,138,138,0.5); }
+        .char-avatar { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 45px; background: #f5f5f5;}
+        .game-header { position: absolute; top: var(--safe-padding); left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 25px; z-index: 10; }
+        .stats-box { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.85); backdrop-filter: blur(5px); padding: 8px 18px; border-radius: 20px; border: 2px solid white; box-shadow: var(--shadow-soft); }
+        .stat-item { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .heart { color: var(--accent-pink); font-size: 22px; animation: pulse 1s infinite alternate; }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+        .progress-container { width: 40%; background: #e0e0e0; height: 20px; border-radius: 10px; border: 2px solid white; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-green), #4caf50); transition: width 0.5s ease; }
+        .map-wrapper { width: 100%; height: 75%; margin-top: 60px; overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; padding: 20px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .map-wrapper::-webkit-scrollbar { display: none; }
+        .board-track { display: flex; align-items: center; gap: 45px; padding: 0 100px; position: relative; height: 300px; }
+        .track-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .tile { width: 75px; height: 75px; border-radius: 50%; background: white; border: 4px solid var(--accent-blue); display: flex; align-items: center; justify-content: center; font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--text-dark); box-shadow: var(--shadow-soft); position: relative; z-index: 2; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; }
+        .tile:nth-child(4n+1) { transform: translateY(-40px); border-color: var(--accent-pink); }
+        .tile:nth-child(4n+2) { transform: translateY(0px); border-color: var(--accent-yellow); }
+        .tile:nth-child(4n+3) { transform: translateY(40px); border-color: var(--accent-green); }
+        .tile:nth-child(4n+4) { transform: translateY(0px); border-color: var(--accent-blue); }
+        .tile.completed { background: #ccff90; }
+        .tile.current { box-shadow: 0 0 20px var(--accent-yellow); border-width: 6px; }
+        .tile-tooltip { position: absolute; top: -45px; background: rgba(0,0,0,0.8); color: white; padding: 4px 10px; border-radius: 10px; font-size: 11px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s; font-family: 'Nunito', sans-serif; }
+        .tile:hover .tile-tooltip { opacity: 1; }
+        #player { width: 55px; height: 55px; position: absolute; z-index: 5; top: 0; left: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; pointer-events: none; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0px 8px 4px rgba(0,0,0,0.2)); }
+        .hop-animation { animation: hop 0.4s ease-in-out; }
+        @keyframes hop { 0%, 100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(-40px) scale(0.9, 1.1); } 95% { transform: translateY(0) scale(1.1, 0.8); } }
+        .dance-animation { animation: dance 0.6s infinite alternate; }
+        @keyframes dance { 0% { transform: translateY(0) rotate(-5deg); } 100% { transform: translateY(-5px) rotate(5deg); } }
+        .dice-area { position: absolute; bottom: var(--safe-padding); right: var(--safe-padding); display: flex; flex-direction: column; align-items: center; z-index: 10; }
+        .dice { width: 80px; height: 80px; background: white; border-radius: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 -4px 0 #d4d4d4; display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; transition: transform 0.2s; border: 3px solid #f5f5f5; }
+        .dice:active { transform: scale(0.9); }
+        .dice.rolling { animation: roll 0.5s infinite linear; }
+        @keyframes roll { 0% { transform: rotate(0deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1.1); } }
+        .quiz-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .quiz-overlay.active { display: flex; opacity: 1; }
+        .quiz-card { background: white; border-radius: 30px; border: 6px solid var(--accent-blue); width: 90%; max-width: 500px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; position: relative; }
+        .quiz-overlay.active .quiz-card { transform: scale(1); }
+        .quiz-header { font-size: 16px; color: var(--accent-blue); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .quiz-question { font-size: 20px; font-weight: 800; margin-bottom: 20px; line-height: 1.4; color: var(--text-dark); }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 15px; }
+        .option-btn { background: #f0f4f8; border: 2px solid #d0dbe5; padding: 14px 20px; border-radius: 18px; font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.2s; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
+        .option-btn:hover { background: #e1f5fe; border-color: var(--accent-blue); }
+        .option-btn.correct { background: #e8f5e9; border-color: var(--accent-green); color: #2e7d32; }
+        .option-btn.wrong { background: #ffebee; border-color: var(--accent-pink); color: #c62828; }
+        .explanation-box { background: #fff9c4; border-radius: 15px; padding: 12px; font-size: 14px; margin-top: 15px; border-left: 5px solid #fbc02d; text-align: left; display: none; animation: fadeIn 0.3s ease; }
+        .shake { animation: shake 0.4s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+        .confetti-canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:150; }
+        .result-icon { font-size: 80px; margin-bottom: 20px; }
+        @media(max-height: 500px) { .board-track { height: 180px; } .tile { width: 55px; height: 55px; font-size: 13px; } .tile:nth-child(4n+1) { transform: translateY(-20px); } .tile:nth-child(4n+3) { transform: translateY(20px); } .quiz-card { padding: 15px; } .quiz-question { font-size: 16px; margin-bottom: 10px; } .option-btn { padding: 8px 15px; font-size: 14px; } }
+    </style>
+</head>
+<body>
+    <div class="sky-bg"><div class="cloud c1"></div><div class="cloud c2"></div><div class="rainbow"></div></div>
+    <canvas id="confetti" class="confetti-canvas"></canvas>
+    <div id="splash-screen" class="screen active">
+        <div class="logo-container"><h1 class="logo-title">PETUALANGAN<br>KEBERAGAMAN INDONESIA</h1><span class="logo-sub">Game Edukasi Papan Interaktif</span></div>
+        <button class="btn-premium" style="margin-top: 40px;" onclick="switchScreen('menu-screen')">MULAI PETUALANGAN!</button>
+    </div>
+    <div id="menu-screen" class="screen">
+        <h2 class="font-kids" style="font-size: 32px; color: #006064; margin-bottom: 10px;">Menu Utama</h2>
+        <p style="font-weight: 800; color: #546e7a;">Ayo pilih petualanganmu hari ini!</p>
+        <div style="display:flex; flex-direction:column; width:250px; margin-top:20px;">
+            <button class="btn-premium" onclick="switchScreen('char-screen')">Main Game</button>
+            <button class="btn-premium btn-blue" onclick="alert('Petunjuk: Klik dadu untuk melangkah. Jawab kuis budaya dengan benar untuk terus maju dan kumpulkan bintang!')">Petunjuk</button>
+        </div>
+    </div>
+    <div id="char-screen" class="screen">
+        <h2 class="font-kids" style="font-size: 28px; color: #006064;">Pilih Karaktermu</h2>
+        <div class="char-container">
+            <div class="char-card selected" onclick="selectCharacter('👦', this)"><div class="char-avatar">👦</div><div style="font-weight:900;">Budi</div></div>
+            <div class="char-card" onclick="selectCharacter('👧', this)"><div class="char-avatar">👧</div><div style="font-weight:900;">Siti</div></div>
+        </div>
+        <button class="btn-premium" onclick="startGame()">Konfirmasi & Masuk Papan</button>
+    </div>
+    <div id="game-screen" class="screen" style="padding:0; justify-content: flex-start;">
+        <div class="game-header">
+            <button class="btn-premium btn-blue" style="padding:8px 15px; font-size:14px; margin:0;" onclick="switchScreen('menu-screen')">⏸️ Menu</button>
+            <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
+            <div class="stats-box">
+                <div class="stat-item"><span class="heart">❤️</span> <span id="lives-val">3</span></div>
+                <div class="stat-item" style="color:#fbc02d;">⭐ <span id="score-val">0</span></div>
+            </div>
+        </div>
+        <div class="map-wrapper" id="map-wrapper">
+            <div class="board-track" id="board-track">
+                <svg class="track-svg" id="track-svg"></svg>
+                <div id="player" class="dance-animation">👦</div>
+            </div>
+        </div>
+        <div class="dice-area"><div style="font-family:'Fredoka One'; font-size:12px; margin-bottom:5px; color:#546e7a;">Klik Dadu</div><div class="dice" id="dice-btn" onclick="rollDice()">🎲</div></div>
+    </div>
+    <div class="quiz-overlay" id="quiz-overlay">
+        <div class="quiz-card" id="quiz-card">
+            <div class="quiz-header" id="quiz-province-name">PROVINSI ACEH</div>
+            <div class="quiz-question" id="quiz-question-text">Apa nama rumah adat daerah ini?</div>
+            <div class="options-grid" id="quiz-options-container"></div>
+            <div class="explanation-box" id="explanation-box"><strong>Penjelasan Hebat:</strong> <span id="explanation-text">Penjelasan jawaban di sini.</span></div>
+            <button class="btn-premium" id="quiz-next-btn" style="display:none; margin-top:15px; font-size:16px; padding:10px 25px;" onclick="closeQuiz()">Lanjut Perjalanan ➡️</button>
+        </div>
+    </div>
+    <div id="gameover-screen" class="screen">
+        <div class="result-icon">😢</div>
+        <h2 class="font-kids" style="font-size:32px; color:#c62828;">Yaa, Nyawa Habis!</h2>
+        <p style="font-weight:800; color:#546e7a; margin-bottom:20px;">Jangan menyerah, mari coba belajar lagi!</p>
+        <button class="btn-premium" onclick="resetGame()">Main Lagi 🔄</button>
+    </div>
+    <div id="win-screen" class="screen">
+        <div class="result-icon">🏆</div>
+        <h2 class="font-kids" style="font-size:36px; color:#2e7d32; text-align:center;">Hore! Kamu Tamat<br>Jelajah Indonesia!</h2>
+        <p style="font-weight:800; color:#546e7a; margin-bottom:10px;">Kamu mengagumkan!</p>
+        <div class="stats-box" style="margin-bottom:20px; font-size:24px;"><span style="color:#fbc02d;">⭐ Total Bintang: <span id="final-score">0</span></span></div>
+        <button class="btn-premium" onclick="resetGame()">Main Lagi 🔄</button>
+    </div>
+    <script>
+        const dataProvinsi = [
+            { n: "Aceh", s: "Aceh", r: "Krong Bade", p: "Ulee Balang", t: "Tari Saman", b: "Rencong", q: "Apa nama tarian adat dari Aceh yang terkenal dengan gerakan tepuk tangan kompaknya?", o: ["Tari Saman", "Tari Piring", "Tari Kecak"], a: 0, e: "Tari Saman dilakukan secara berkelompok dengan gerakan tepuk dada dan tangan yang sangat cepat dan kompak!" },
+            { n: "Sumatera Utara", s: "Batak", r: "Bolon", p: "Ulos", t: "Tari Tor-Tor", b: "Kain Ulos", q: "Suku Batak di Sumatera Utara memiliki kain tenun khas yang sering dipakai saat pesta adat. Apa nama kain itu?", o: ["Kain Batik", "Kain Ulos", "Kain Songket"], a: 1, e: "Kain Ulos merupakan kain kebanggaan suku Batak yang bermakna kasih sayang dan persatuan." },
+            { n: "Sumatera Barat", s: "Minangkabau", r: "Gadang", p: "Bundo Kanduang", t: "Tari Piring", b: "Rendang", q: "Rumah adat Sumatera Barat memiliki atap unik yang melengkung tajam mirip tanduk kerbau. Disebut apakah rumah adat ini?", o: ["Rumah Joglo", "Rumah Gadang", "Rumah Honai"], a: 1, e: "Rumah Gadang punya bentuk atap ikonik yang melengkung tinggi disebut Gonjong." },
+            { n: "Riau", s: "Melayu", r: "Selaso Jatuh Kembar", p: "Teluk Belanga", t: "Tari Zapin", b: "Gurindam", q: "Tarian adat Riau yang dipengaruhi budaya Arab-Melayu dengan ketukan kaki cepat adalah...", o: ["Tari Pendet", "Tari Zapin", "Tari Merak"], a: 1, e: "Tari Zapin adalah tarian menghibur yang sarat dengan pesan edukasi dan agama khas Melayu." },
+            { n: "Kepulauan Riau", s: "Melayu", r: "Belah Bubung", p: "Kebaya Labuh", t: "Tari Persembahan", b: "Pantun", q: "Kepulauan Riau sangat terkenal dengan tradisi sastra lisan berupa puisi lama berima a-b-a-b. Apa namanya?", o: ["Pantun", "Novel", "Komik"], a: 0, e: "Masyarakat Melayu Riau mahir berbalas pantun untuk menyambut tamu kehormatan." },
+            { n: "Jambi", s: "Melayu Jambi", r: "Panggung Kajang Leko", p: "Baju Kurung Tanggung", t: "Tari Sekapur Sirih", b: "Upacara Besale", q: "Tari Sekapur Sirih dari Jambi ditarikan oleh anak-anak/remaja perempuan untuk fungsi apa?", o: ["Menolak bala", "Menyambut tamu kehormatan", "Merayakan panen padi"], a: 1, e: "Tari Sekapur Sirih melambangkan keterbukaan hati masyarakat Jambi menerima tamu." },
+            { n: "Sumatera Selatan", s: "Palembang", r: "Limasan", p: "Aesan Gede", t: "Tari Gending Sriwijaya", b: "Pempek", q: "Makanan khas dari Sumatera Selatan yang terbuat dari olahan ikan digoreng dan kuah cuko manis pedas adalah...", o: ["Pempek", "Rendang", "Gudeg"], a: 0, e: "Pempek Palembang sangat digemari anak-anak karena rasa kuah cukonya yang segar dan gurih!" },
+            { n: "Bangka Belitung", s: "Melayu", r: "Rakit", p: "Pakaian Seting", t: "Tari Sepen", b: "Martabak Bangka", q: "Rumah adat asli Bangka Belitung dibangun terapung di atas air sungai karena adaptasi alam. Disebut rumah...", o: ["Rumah Rakit", "Rumah Joglo", "Rumah Gadang"], a: 0, e: "Rumah Rakit terbuat dari bambu kuat agar bisa mengapung mengikuti pasang surut air sungai." },
+            { n: "Bengkulu", s: "Rejang", r: "Bubungan Lima", p: "Pakaian Rejang", t: "Tari Andun", b: "Bunga Rafflesia", q: "Bengkulu menjadi tempat habitat asli bunga raksasa langka di dunia, yaitu bunga...", o: ["Bunga Mawar", "Bunga Rafflesia Arnoldii", "Bunga Melati"], a: 1, e: "Bunga Rafflesia Arnoldii adalah puspa langka yang tidak memiliki akar atau daun dan berukuran sangat besar!" },
+            { n: "Lampung", s: "Pepadun", r: "Nuwo Sesat", p: "Tulang Bawang", t: "Tari Sigeh Penguten", b: "Kain Tapis", q: "Kain adat Lampung bermotif indah benang emas yang ditenun secara tradisional dinamakan kain...", o: ["Kain Tapis", "Kain Sutra", "Kain S
